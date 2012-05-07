@@ -1,0 +1,70 @@
+<GBase Type="table">
+  <TableHeaderInfo>
+    <Name>$TABLENAME</Name>
+    <Creator>$CREATORSUSERNAME</Creator>
+  </TableHeaderInfo>
+  <TableFields>
+    <Field Name="$FIELD1">
+      <Type>string|int</Type>
+    </Field>
+    <Field Name="$FIELD2">
+      <Type>string|int</Type>
+    </Field>
+    .
+    .
+    .
+    <Field Name="$FIELDN">
+      <Type>string|int</Type>
+    </Field>
+  </TableFields>
+  <TableData>
+    <Entry>
+      <D>$DATA-A1</D>
+      <D>$DATA-A2</D>
+      .
+      .
+      .
+      <D>$DATA-AN</D>
+    </Entry>
+    .
+    .
+    .
+    <Entry>
+      <D>$DATA-Z1</D>
+      <D>$DATA-Z2</D>
+      .
+      .
+      .
+      <D>$DATA-ZN</D>
+    </Entry>
+  </TableData>
+</GBase>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

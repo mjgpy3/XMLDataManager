@@ -1,0 +1,35 @@
+Commands:
+
+USE [gbase-name]		
+-Uses a different GBase
+
+GEN GBASE [new-gbase-name]	
+-Generates a new GBase of the name [new-gbase-name]
+
+GEN TABLE [new-table-name]	
+-Generates a new table of the name [new-table-name] in the currently being used GBase
+
+GEN COL [new-col-name] IN [table-name]
+-Generates a new column of the name [new-col-name] 
+
+GEN ROW WITH attr1:value1 ... attrN:valueN IN [table-name]
+-Generates a new row with the attribute/col's values as specified by attrX:valueX in the table [table-name], 
+	all cols in the table must be given a value 
+
+GET ROW WITH attr1:value1 .. attrN:valueN IN [table-name]
+-Gets the row with the specified attribute-value pairs
+
+DEL GBASE [gbase-name]
+-Deletes [gbase-name] and all tables it has
+
+DEL TABLE [table-name]
+-Deletes [table-name] and all its data in the currently being used GBase
+
+DEL ROW WITH attr1:value1 ... attrN:valueN IN [table-name]
+-Deletes any and all rows in [table-name] that have the specified attribute value pairs
+
+DEL COL [col-name] in [table-name]
+-Deletes the column [col-name] and any data that that resides in that col as a attribute
+
+MOD ROW WITH attr1A:value1A ... attrNA:valueNA IN [table-name] THAT attr1B:value1B ... attrB:valueB
+-Makes it so that any data having matchin attribute/col-value pairs attrXA:valueXA change based on attrXB:valueXB

@@ -1,0 +1,22 @@
+<GBase Type="model">
+  <HeaderInfo>
+    <Name>$MODELNAME</Name>
+    <Creator>$USERNAMEOFCREATOR</Creator>
+    <CreationDate>$DATEOFCREATION</CreationDate>
+    <Access>A|C</Access>
+  </HeaderInfo>
+  <TableData>
+    <TableInstance Name="$TABLENAME">
+      <Location>$TABLELOCATION</Location>
+    </TableInstance>
+    .
+    .
+    .
+    <TableInstance Name="$TABLENAME">
+      <Location>$TABLELOCATION</Location>
+    </TableInstance>        
+  </TableData>
+</GBase>
+
+
+

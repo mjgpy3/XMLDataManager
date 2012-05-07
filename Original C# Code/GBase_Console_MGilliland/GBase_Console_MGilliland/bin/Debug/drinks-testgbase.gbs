@@ -1,0 +1,44 @@
+<GBase Type="table">
+  <TableHeaderInfo>
+    <Name>drinks</Name>
+    <Creator>Michael-PC\Michael</Creator>
+  </TableHeaderInfo>
+  <TableFields>
+    <Field Name="drinkname">
+      <Type>string</Type>
+    </Field>
+    <Field Name="drinktype">
+      <Type>string</Type>
+    </Field>
+    <Field Name="flavors">
+      <Type>int</Type>
+    </Field>
+  </TableFields>
+  <TableData>
+    <Entry>
+      <D>Monster Coffee</D>
+      <D>Coffee</D>
+      <D>3</D>
+    </Entry>
+    <Entry>
+      <D>Monster</D>
+      <D>Energy Drink</D>
+      <D>5</D>
+    </Entry>
+    <Entry>
+      <D>Mountain Dew</D>
+      <D>Soda</D>
+      <D>6</D>
+    </Entry>
+    <Entry>
+      <D>Milk</D>
+      <D>Natural</D>
+      <D>2</D>
+    </Entry>
+    <Entry>
+      <D>Sobe</D>
+      <D>juice</D>
+      <D>5</D>
+    </Entry>
+  </TableData>
+</GBase>
