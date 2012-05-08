@@ -5,6 +5,13 @@
 # 
 # 
 
+import GBaseBrain
+
 class GBaseHandler:
 	def __init__(self):
-		
+		self.use = ""
+		self.brain = GbaseBrain.GBaseBrain()
+
+	def Use(self, gbaseName):
+		if self.brain.FileIsModel(self.brain.GetModelFileName(gbaseName)):
+			self.use = gbaseName.lower()
