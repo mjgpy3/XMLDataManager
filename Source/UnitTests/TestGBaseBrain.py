@@ -16,6 +16,18 @@ class testGBaseBrain(unittest.TestCase):
 
 	def test_fileIsModelWorksForARealModel(self):
 		self.assertTrue(self.beingTested.FileIsModel("./GBaseBrain_Data/testgbase.gbs"))
+	
+	def test_fileIsModelWorksForAFakeModel(self):
+                self.assertFalse(self.beingTested.FileIsModel("./GBaseBrain_Data/testtable-testgbase.gbs"))
+
+	def test_fileIsTalbeWorkForARealTable(self):
+                self.assertTrue(self.beingTested.FileIsTable("./GBaseBrain_Data/testtable-testgbase.gbs"))
+
+        def test_fileIsTableWorksForAFakeTable(self):
+                self.assertFalse(self.beingTested.FileIsTable("./GBaseBrain_Data/testgbase.gbs"))
+
+	def test_FileIsXXXXThrowsAnExceptionIfFileDNE(self):
+                self.assertRaises(GBaseExceptions.GBaseGeneralException, self.beingTested.FileIsTable, ("./GBaseBrain_Data/monkeyfoo.txt"))
 
 def suite():
 	suite = unittest.TestSuite()
