@@ -66,6 +66,7 @@ namespace GBase_Console_MGilliland
             _xmlOut.Open(_brain.GetModelFileName(name));      // Open a "new" GBase file for writing
 
             // Write out the beginning header stuff
+
             _xmlOut.BeginTagWithAttributes("GBase", new String[] {"Type"}, new String[] {"model"}); 
             _xmlOut.BeginTag("HeaderInfo");
             _xmlOut.WriteTagAndContents("Name", name.ToLower());

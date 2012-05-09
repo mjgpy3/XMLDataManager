@@ -9,6 +9,7 @@ import sys, unittest
 sys.path.append('..')
 import GBaseHandler
 import GBaseExceptions
+from os import system as s
 
 class testGBaseHandler(unittest.TestCase):
 	def setUp(self):
@@ -19,8 +20,13 @@ class testGBaseHandler(unittest.TestCase):
 		self.assertEqual(self.beingTested.use, "gbasehandler_data/testgbase")
 
 	
-#	def test_FileIsModelWorksForAFakeModel(self):
-#                self.assertFalse(self.beingTested.FileIsModel("./GBaseBrain_Data/testtable-testgbase.gbs"))
+	def test_GenGBaseMakesANiceFile(self):
+                self.beingTested.GenGBase("foobar")
+		with open("./foobar.gbs", 'r') as readToTest:
+			self.assertEqual(readToTest.read(), '<GBase Type="model"><HeaderInfo><Name>foobar</Name><Creator>michael</Creator><CreationDate /><Access>A</Access></HeaderInfo><TableData /></GBase>')
+
+	def tearDown(self):
+		s("rm foobar.gbs")
 
 
 def suite():
