@@ -14,8 +14,10 @@ class testGBaseHandler(unittest.TestCase):
 	def setUp(self):
 		self.beingTested = GBaseHandler.GBaseHandler()
 
-#	def test_FileIsModelWorksForARealModel(self):
-#		self.assertTrue(self.beingTested.FileIsModel("./GBaseBrain_Data/testgbase.gbs"))
+	def test_UseWorksProperly(self):
+		self.beingTested.Use("GBaseHandler_Data/TeStGBasE")
+		self.assertEqual(self.beingTested.use, "gbasehandler_data/testgbase")
+
 	
 #	def test_FileIsModelWorksForAFakeModel(self):
 #                self.assertFalse(self.beingTested.FileIsModel("./GBaseBrain_Data/testtable-testgbase.gbs"))

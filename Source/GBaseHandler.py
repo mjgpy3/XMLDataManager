@@ -10,7 +10,7 @@ import GBaseBrain
 class GBaseHandler:
 	def __init__(self):
 		self.use = ""
-		self.brain = GbaseBrain.GBaseBrain()
+		self.brain = GBaseBrain.GBaseBrain()
 
 	def Use(self, gbaseName):
 		if self.brain.FileIsModel(self.brain.GetModelFileName(gbaseName)):
