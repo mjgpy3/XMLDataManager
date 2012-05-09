@@ -31,7 +31,7 @@ class GBaseHandler:
 		creator.text = getpass.getuser()
 		headerInfo.append(creator)
 		creationDate = XML.Element("CreationDate")
-		creationDate.Text = str(datetime.datetime.now())
+		creationDate.text = str(datetime.datetime.now())
 		headerInfo.append(creationDate)
 		access = XML.Element("Access")
 		access.text = "A"
@@ -43,3 +43,6 @@ class GBaseHandler:
 			XML.ElementTree(root).write(outputFile)
 
 		self.Use(gbaseName)
+a = GBaseHandler()
+
+a.GenGBase("foobar")

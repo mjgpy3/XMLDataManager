@@ -23,11 +23,10 @@ class testGBaseHandler(unittest.TestCase):
 	def test_GenGBaseMakesANiceFile(self):
                 self.beingTested.GenGBase("foobar")
 		with open("./foobar.gbs", 'r') as readToTest:
-			self.assertEqual(readToTest.read(), '<GBase Type="model"><HeaderInfo><Name>foobar</Name><Creator>michael</Creator><CreationDate /><Access>A</Access></HeaderInfo><TableData /></GBase>')
-
-	def tearDown(self):
-		s("rm foobar.gbs")
-
+			fileData = readToTest.read()
+			self.assertEqual(fileData[:51], '<GBase Type="model"><HeaderInfo><Name>foobar</Name>')
+			self.assertEqual(fileData[-67:], '</CreationDate><Access>A</Access></HeaderInfo><TableData /></GBase>')
+		s("rm ./foobar.gbs")
 
 def suite():
 	suite = unittest.TestSuite()
