@@ -96,11 +96,11 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 		
-	def RowIn(self, attrs, values, inThisTable):
-		for i in range(len(attrs)):
-			attrs[i] = attrs[i].lower()
-
+	def GenRowIn(self, attrs, values, inThisTable):
+		attrsFromFile = []
+		dictToWrite = {}
 		found = False
+
                 for tableInstance in XML.parse(self.brain.GetModelFileName(self.use)).getroot()[1]:
                         if tableInstance.attrib["Name"] == inThisTable.lower():
                                 found = True
@@ -108,5 +108,40 @@ class GBaseHandler:
 
                 if not found or not self.brain.FileIsTable(self.brain.GetTableFileName(inThisTable, self.use)):
                         raise GBaseExceptions.GBaseGeneralException("Table" + inThisTable + "does not exist in model")
-			
+	
 
+		for i in range(len(attrs)):
+                        attrs[i] = attrs[i].lower()
+
+		for field in XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()[1]:
+			attrsFromFile.append(field.attrib["Name"])
+
+		if not self.brain.HaveSameElements(attrs, attrsFromFile):		
+			raise GBaseExceptions.GBaseGeneralException("Some given attribute does not match the file")
+
+		try: 
+			for i in range(len(attrs)):
+				dictToWrite[attrs[i]] = values[i] 		
+		except:
+			raise GBaseExceptions.GBaseGeneralException("Every attribute must have a value")
+
+		entity = XML.Element("Entity")
+
+		for i in range(len(attrs)):
+			data = XML.Element("D")
+			data.text = dictToWrite[attrsFromFile[i]]
+			entity.append(data)
+
+		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
+
+		structure[2].append(entity)
+
+		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
+                        XML.ElementTree(structure).write(outputFile)
+
+
+a = GBaseHandler()
+
+a.Use("testgbase")
+# attrs, values, inThisTable
+a.GenRowIn(["id", "foo", "monkey"], ["4", "4th Entry", "False"], "cars")
