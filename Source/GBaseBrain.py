@@ -6,6 +6,7 @@
 # 
 
 import GBaseExceptions as ex
+import xml.etree.ElementTree as XML
 
 class GBaseBrain:
 	def __init__(self, location = "./", separator = "-", extension = ".gbs"):
@@ -17,13 +18,9 @@ class GBaseBrain:
 	def FileIsTable(self, fileName, valueToLookFor = "table"):
 		readData = ""
 		try:
-			with open(fileName, 'r') as f:
-				readData = f.read()
-		except IOError:
-			raise ex.GBaseGeneralException('Could not open \"' + fileName + '\"') 
-
-		readData = readData[readData.index('<'):readData.index('>')][readData.find('\"') + 1:readData.rfind('\"')]
-		return valueToLookFor == readData
+			return XML.parse(fileName).getroot().attrib['Type'].lower() == valueToLookFor.lower()
+		except:
+			raise ex.GBaseGeneralException(valueToLookFor + ' by the name of ' + fileName + ' not found') 
 
 	""" Returns true if the passed filename is a model """
 	def FileIsModel(self, fileName):

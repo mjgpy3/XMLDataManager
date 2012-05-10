@@ -71,3 +71,6 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(tableName, self.use), "w") as outputFile:
                         XML.ElementTree(root).write(outputFile)
 
+
+	def GenColIn(colName, colType, inThisTable):
+		pass		
