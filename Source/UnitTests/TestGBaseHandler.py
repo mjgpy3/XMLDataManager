@@ -14,14 +14,44 @@ from os import system as s
 class testGBaseHandler(unittest.TestCase):
 	def setUp(self):
 		self.beingTested = GBaseHandler.GBaseHandler()
+		self.beingTested.GenGBase("foobar")
+		self.beingTested.GenTable("spameggs")
+		self.beingTested.GenColIn("id", "string", "spameggs")
+		self.beingTested.GenColIn("spamname", "string", "spameggs")
+		
+
+	def test_UseWorksProperlyIfCorrectGBaseIsGiven(self):
+		self.beingTested.Use("FooBar")
+		self.assertEqual("foobar", self.beingTested.use)
+
+	def test_UseRaisesExceptionIfIncorrectGBaseIsGiven(self):
+		self.assertRaises(GBaseExceptions.GBaseGeneralException, self.beingTested.Use, "FakeFakeFake")
 
 	def test_GenGBaseMakesANiceFile(self):
-                self.beingTested.GenGBase("foobar")
 		with open("./foobar.gbs", 'r') as readToTest:
 			fileData = readToTest.read()
 			self.assertEqual(fileData[:51], '<GBase Type="model"><HeaderInfo><Name>foobar</Name>')
-			self.assertEqual(fileData[-67:], '</CreationDate><Access>A</Access></HeaderInfo><TableData /></GBase>')
-		s("rm ./foobar.gbs")
+
+	def test_GenTableMakesANiceFile(self):
+		self.beingTested.GenTable("cars")
+		with open("./cars-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertEqual(fileData, '<GBase Type="table"><TableHeaderInfo><Name>cars</Name><Creator>michael</Creator></TableHeaderInfo><TableFields /><TableData /></GBase>')
+
+	def test_GenColInWritesHeaderDataProperly(self):
+		self.beingTested.GenColIn("testcol", "string", "spameggs")
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertFalse(fileData.find('<Field Name="testcol"><Type>string</Type></Field>') == -1)
+
+	def test_GenRowWithWritesANiceRow(self):
+		self.beingTested.GenRowIn(["id", "spamname"], ["3", "eggs"], "spameggs")
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertFalse(fileData.find('<Entity><D>3</D><D>eggs</D></Entity>') == -1)
+
+	def tearDown(self):
+		s("rm *foobar*")
 
 def suite():
 	suite = unittest.TestSuite()

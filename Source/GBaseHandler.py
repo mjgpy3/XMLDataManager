@@ -50,7 +50,7 @@ class GBaseHandler:
 		location = XML.Element("Location")		
 		location.text = self.brain.GetTableFileName(tableName, self.use)
 		tableInstance.append(location)
-		gbaseRoot.append(tableInstance)
+		gbaseRoot[1].append(tableInstance)
 
 		with open(self.brain.GetModelFileName(self.use), "w") as outputFile:                
         		XML.ElementTree(gbaseRoot).write(outputFile)
