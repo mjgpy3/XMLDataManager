@@ -1,0 +1,1 @@
+<GBase Type="table"><TableHeaderInfo><Name>cars</Name><Creator>michael</Creator></TableHeaderInfo><TableFields><Field Name="id"><Type>int</Type></Field><Field Name="foo"><Type>int</Type></Field></TableFields><TableData><Entry><D>1</D><D /></Entry><Entry><D>2</D><D /></Entry></TableData></GBase>

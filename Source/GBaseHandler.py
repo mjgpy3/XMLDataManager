@@ -9,6 +9,7 @@ import GBaseBrain
 import xml.etree.ElementTree as XML
 import getpass
 import datetime
+import GBaseExceptions
 
 class GBaseHandler:
 	def __init__(self):
@@ -72,5 +73,31 @@ class GBaseHandler:
                         XML.ElementTree(root).write(outputFile)
 
 
-	def GenColIn(colName, colType, inThisTable):
-		pass		
+	def GenColIn(self, colName, colType, inThisTable):
+		found = False 
+		for tableInstance in XML.parse(self.brain.GetModelFileName(self.use)).getroot()[1]:
+			if tableInstance.attrib["Name"] == inThisTable.lower():
+				found = True
+				break
+		if not found:
+			raise GBaseExceptions.GBaseGeneralException("Table" + inThisTable + "does not exist in model")
+
+		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
+		field = XML.Element("Field", Name=colName.lower())
+		type = XML.Element("Type")
+		type.text = colType.lower()
+		field.append(type)
+		structure[1].append(field)
+		data = XML.Element("D")
+		for entry in structure[2]:
+			entry.append(data)
+
+		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
+                        XML.ElementTree(structure).write(outputFile)
+		
+
+a = GBaseHandler()
+
+a.Use("testgbase")
+
+a.GenColIn("foo", "int", "cars")
