@@ -35,6 +35,13 @@ class testGBaseBrain(unittest.TestCase):
 	def test_GetModelNameWorksReturnsCorrectFormat(self):
                 self.assertEqual(self.beingTested.GetModelFileName("testgbase"), "./testgbase.gbs")
 
+	def test_HaveSameElementsWorksForSomeRandomCases(self):
+                self.assertTrue(self.beingTested.HaveSameElements([], []))
+		self.assertTrue(self.beingTested.HaveSameElements([4, 5, 2], [2, 5, 4]))
+		self.assertFalse(self.beingTested.HaveSameElements([2, 3], [4, 3, 2]))
+		self.assertTrue(self.beingTested.HaveSameElements(["foo", 42, "Python!", "Michael", 3], [3, "foo", "Python!", "Michael", 42]))
+		self.assertFalse(self.beingTested.HaveSameElements([42], []))
+
 def suite():
 	suite = unittest.TestSuite()
 	suite.addTest(unittest.makeSuite(testGBaseBrain))

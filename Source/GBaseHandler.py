@@ -79,7 +79,8 @@ class GBaseHandler:
 			if tableInstance.attrib["Name"] == inThisTable.lower():
 				found = True
 				break
-		if not found:
+
+		if not found or not self.brain.FileIsTable(self.brain.GetTableFileName(inThisTable, self.use)):
 			raise GBaseExceptions.GBaseGeneralException("Table" + inThisTable + "does not exist in model")
 
 		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
@@ -95,9 +96,17 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 		
+	def RowIn(self, attrs, values, inThisTable):
+		for i in range(len(attrs)):
+			attrs[i] = attrs[i].lower()
 
-a = GBaseHandler()
+		found = False
+                for tableInstance in XML.parse(self.brain.GetModelFileName(self.use)).getroot()[1]:
+                        if tableInstance.attrib["Name"] == inThisTable.lower():
+                                found = True
+                                break
 
-a.Use("testgbase")
+                if not found or not self.brain.FileIsTable(self.brain.GetTableFileName(inThisTable, self.use)):
+                        raise GBaseExceptions.GBaseGeneralException("Table" + inThisTable + "does not exist in model")
+			
 
-a.GenColIn("foo", "int", "cars")
