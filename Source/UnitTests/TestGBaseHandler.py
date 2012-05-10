@@ -50,6 +50,27 @@ class testGBaseHandler(unittest.TestCase):
                         fileData = readToTest.read()
                         self.assertFalse(fileData.find('<Entity><D>3</D><D>eggs</D></Entity>') == -1)
 
+	def test_multipleGetRowWithQueriesWork(self):
+		self.beingTested.GenRowIn(["id", "spamname"], ["1", "eggs"], "spameggs")
+		self.beingTested.GenRowIn(["id", "spamname"], ["2", "Pizza"], "spameggs")
+		self.beingTested.GenRowIn(["id", "spamname"], ["3", "wings"], "spameggs")
+		self.beingTested.GenRowIn(["id", "spamname"], ["4", "fish"], "spameggs")
+
+		result = self.beingTested.GetRowWith(["id"], ["2"], "spameggs")
+
+		self.assertTrue(result[0][0] == "2" and result[0][1] == "Pizza")
+
+		result = self.beingTested.GetRowWith([], [], "spameggs")
+
+		self.assertTrue(result[0][0] == "1" and result[0][1] == "eggs")
+		self.assertTrue(result[1][0] == "2" and result[1][1] == "Pizza")
+		self.assertTrue(result[2][0] == "3" and result[2][1] == "wings")
+		self.assertTrue(result[3][0] == "4" and result[3][1] == "fish")
+
+		result = self.beingTested.GetRowWith(["id"], ["5"], "spameggs")
+
+		self.assertTrue(result == [])
+
 	def tearDown(self):
 		s("rm *foobar*")
 

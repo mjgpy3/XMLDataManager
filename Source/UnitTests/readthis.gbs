@@ -1,1 +1,0 @@
-<GBase Type="table"><TableHeaderInfo><Name>spameggs</Name><Creator>michael</Creator></TableHeaderInfo><TableFields><Field Name="id"><Type>string</Type></Field><Field Name="spamname"><Type>string</Type></Field></TableFields><TableData><Entity><D>3</D><D>eggs</D></Entity></TableData></GBase>
