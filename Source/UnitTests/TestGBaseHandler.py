@@ -15,11 +15,6 @@ class testGBaseHandler(unittest.TestCase):
 	def setUp(self):
 		self.beingTested = GBaseHandler.GBaseHandler()
 
-	def test_UseWorksProperly(self):
-		self.beingTested.Use("GBaseHandler_Data/TeStGBasE")
-		self.assertEqual(self.beingTested.use, "gbasehandler_data/testgbase")
-
-	
 	def test_GenGBaseMakesANiceFile(self):
                 self.beingTested.GenGBase("foobar")
 		with open("./foobar.gbs", 'r') as readToTest:

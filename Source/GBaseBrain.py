@@ -18,11 +18,12 @@ class GBaseBrain:
 		readData = ""
 		try:
 			with open(fileName, 'r') as f:
-				readData = f.readline().replace(' ', '').replace('\n', '')
+				readData = f.read()
 		except IOError:
 			raise ex.GBaseGeneralException('Could not open \"' + fileName + '\"') 
 
-		return '<GBaseType=\"' + valueToLookFor + '\">' == readData
+		readData = readData[readData.index('<'):readData.index('>')][readData.find('\"') + 1:readData.rfind('\"')]
+		return valueToLookFor == readData
 
 	""" Returns true if the passed filename is a model """
 	def FileIsModel(self, fileName):

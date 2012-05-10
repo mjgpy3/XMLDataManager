@@ -20,7 +20,7 @@ class testGBaseBrain(unittest.TestCase):
 	def test_FileIsModelWorksForAFakeModel(self):
                 self.assertFalse(self.beingTested.FileIsModel("./GBaseBrain_Data/testtable-testgbase.gbs"))
 
-	def test_FileIsTalbeWorkForARealTable(self):
+	def test_FileIsTableWorkForARealTable(self):
                 self.assertTrue(self.beingTested.FileIsTable("./GBaseBrain_Data/testtable-testgbase.gbs"))
 
         def test_FileIsTableWorksForAFakeTable(self):
