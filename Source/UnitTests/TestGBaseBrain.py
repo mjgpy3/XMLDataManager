@@ -41,6 +41,7 @@ class testGBaseBrain(unittest.TestCase):
 		self.assertFalse(self.beingTested.HaveSameElements([2, 3], [4, 3, 2]))
 		self.assertTrue(self.beingTested.HaveSameElements(["foo", 42, "Python!", "Michael", 3], [3, "foo", "Python!", "Michael", 42]))
 		self.assertFalse(self.beingTested.HaveSameElements([42], []))
+		self.assertTrue(self.beingTested.HaveSameElements([], []))
 
 def suite():
 	suite = unittest.TestSuite()

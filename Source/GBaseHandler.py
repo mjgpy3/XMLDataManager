@@ -140,8 +140,56 @@ class GBaseHandler:
                         XML.ElementTree(structure).write(outputFile)
 
 
-a = GBaseHandler()
+	def GetRowWith(self, attrs, values, inThisTable):
+		attrsFromFile = []
+                dictToTest = {}
+                found = False
+		result = []
+		nameToLocation = {}
+		index = 0
 
-a.Use("testgbase")
-# attrs, values, inThisTable
-a.GenRowIn(["id", "foo", "monkey"], ["4", "4th Entry", "False"], "cars")
+                for tableInstance in XML.parse(self.brain.GetModelFileName(self.use)).getroot()[1]:
+                        if tableInstance.attrib["Name"] == inThisTable.lower():
+                                found = True
+                                break
+
+                if not found or not self.brain.FileIsTable(self.brain.GetTableFileName(inThisTable, self.use)):
+                        raise GBaseExceptions.GBaseGeneralException("Table" + inThisTable + "does not exist in model")
+
+
+                for i in range(len(attrs)):
+                        attrs[i] = attrs[i].lower()
+
+                for field in XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()[1]:
+                        attrsFromFile.append(field.attrib["Name"])
+			nameToLocation[field.attrib["Name"]] = index
+			index += 1
+
+                if not len(set(attrs) - set(attrsFromFile)) == 0:
+                        raise GBaseExceptions.GBaseGeneralException("Some given attribute does not match the file")
+
+                try:
+                        for i in range(len(attrs)):
+                                dictToTest[attrs[i]] = values[i]
+                except:
+                        raise GBaseExceptions.GBaseGeneralException("Every attribute must have a value")
+
+                structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
+
+                for entity in structure[2]:
+			allMatch = True
+			for attribute in attrs:
+				if entity[nameToLocation[attribute]].text != dictToTest[attribute]:
+					allMatch = False
+					break
+			if allMatch:
+				toAppend = []
+				for i in entity:
+				 	toAppend.append(i.text)
+				result.append(toAppend)
+		return result
+
+#a = GBaseHandler()
+
+#a.Use("testgbase")
+
