@@ -251,3 +251,31 @@ class GBaseHandler:
 			with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
         	                XML.ElementTree(structure).write(outputFile)
 
+	def ModRowWith(self, withAttrs, withValues, inThisTable, thatAttrs, thatValues):
+		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
+                dataToModify = self.GetRowWith(withAttrs, withValues, inThisTable)
+		nameToLocation = {}
+		index = 0
+
+		self.DelRowWith(withAttrs, withValues, inThisTable)
+
+		for field in XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()[1]:
+                        nameToLocation[field.attrib["Name"]] = index
+                        index += 1
+
+		for i in range(len(thatAttrs)):
+			for k in range(len(dataToModify)):
+				dataToModify[k][nameToLocation[thatAttrs[i]]] = thatValues[i] 
+
+		for data in dataToModify:
+                        entryTag = XML.Element("Entry")
+                        for datum in data:
+                                dTag = XML.Element("D")
+                                dTag.text = datum
+                                entryTag.append(dTag)
+
+                        structure[2].append(entryTag)
+
+		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
+                                XML.ElementTree(structure).write(outputFile)
+
