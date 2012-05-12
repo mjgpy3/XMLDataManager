@@ -71,6 +71,12 @@ class testGBaseHandler(unittest.TestCase):
 
 		self.assertTrue(result == [])
 
+	def test_DelGBaseGetsRidOfTheTableAndModelFiles(self):
+		self.beingTested.DelGBase('foobar')
+		self.assertRaises(IOError, open, 'foobar.gbs', 'r')
+		self.assertRaises(IOError, open, 'foobar-testgbase.gbs', 'r')
+		s("touch foobar")
+
 	def tearDown(self):
 		s("rm *foobar*")
 
