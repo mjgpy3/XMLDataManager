@@ -233,3 +233,21 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 
+	def DelColIn(self, colName, inThisTable):
+		foundAndAt = [False, -1]
+		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
+
+		for field in structure[1]:
+			foundAndAt[1] += 1
+			if colName.lower() == field.attrib['Name']:
+				foundAndAt[0] = True
+				structure[1].remove(field)
+				break
+
+		if foundAndAt[0]:
+			for entry in structure[2]:
+				entry.remove(entry[foundAndAt[1]])
+	
+			with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
+        	                XML.ElementTree(structure).write(outputFile)
+
