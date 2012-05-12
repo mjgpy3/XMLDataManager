@@ -77,6 +77,17 @@ class testGBaseHandler(unittest.TestCase):
 		self.assertRaises(IOError, open, 'foobar-testgbase.gbs', 'r')
 		s("touch foobar")
 
+	def test_DelTableGetsRidOfTheTableFile(self):
+		self.beingTested.DelTable('spameggs')
+		self.assertRaises(IOError, open, 'foobar-testgbase.gbs', 'r')
+
+	def test_DelTableGetsRidOfDataInTheModelFile(self):
+		self.beingTested.DelTable('spameggs')
+		with open("./foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertTrue(fileData.find('Name="spameggs"') == -1)
+			self.assertTrue(fileData.find('./spameggs-foobar.gbs') == -1)
+
 	def tearDown(self):
 		s("rm *foobar*")
 
