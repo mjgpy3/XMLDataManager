@@ -208,3 +208,28 @@ class GBaseHandler:
 		with open(self.brain.GetModelFileName(self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 
+	def DelRowWith(self, attrs, values, inThisTable):
+		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
+		allData = self.GetRowWith([], [], inThisTable)
+		dataToRemove = self.GetRowWith(attrs, values, inThisTable)
+
+		for toRemove in dataToRemove:
+			for data in allData:
+				if len(set(toRemove) - set(data)) == 0:
+					allData.remove(toRemove)
+					break
+		
+		structure[2] = XML.Element("TableData")
+	
+		for data in allData:
+			entryTag = XML.Element("Entry")
+			for datum in data:
+				dTag = XML.Element("D")
+				dTag.text = datum
+				entryTag.append(dTag)
+
+			structure[2].append(entryTag)
+		
+		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
+                        XML.ElementTree(structure).write(outputFile)
+

@@ -1,0 +1,1 @@
+<GBase Type="model"><HeaderInfo><Name>testgbase</Name><Creator>michael</Creator><CreationDate>2012-05-12 13:00:09.943017</CreationDate><Access>A</Access></HeaderInfo><TableData><TableInstance Name="drinks"><Location>./drinks-testgbase.gbs</Location></TableInstance><TableInstance Name="foods"><Location>./foods-testgbase.gbs</Location></TableInstance></TableData></GBase>
