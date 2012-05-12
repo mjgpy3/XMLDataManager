@@ -10,6 +10,7 @@ import xml.etree.ElementTree as XML
 import getpass
 import datetime
 import GBaseExceptions
+import os
 
 class GBaseHandler:
 	def __init__(self):
@@ -189,7 +190,17 @@ class GBaseHandler:
 				result.append(toAppend)
 		return result
 
-#a = GBaseHandler()
+	def DelGBase(self, gbaseName):
+		if self.brain.FileIsModel(self.brain.GetModelFileName(gbaseName)):
+			tableInstances = XML.parse(self.brain.GetModelFileName(gbaseName)).getroot()[1]
+			for instance in tableInstances:
+				os.remove(instance[0].text)
+	
+			os.remove(self.brain.GetModelFileName(gbaseName))
+			
 
-#a.Use("testgbase")
+a = GBaseHandler()
 
+a.Use("testgbase")
+
+a.DelGBase("testgbase")

@@ -16,3 +16,4 @@ do
 done
 
 rm ../*.pyc
+rm ./*.pyc
