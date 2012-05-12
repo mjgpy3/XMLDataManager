@@ -192,15 +192,19 @@ class GBaseHandler:
 
 	def DelGBase(self, gbaseName):
 		if self.brain.FileIsModel(self.brain.GetModelFileName(gbaseName)):
-			tableInstances = XML.parse(self.brain.GetModelFileName(gbaseName)).getroot()[1]
-			for instance in tableInstances:
+			for instance in XML.parse(self.brain.GetModelFileName(gbaseName)).getroot()[1]:
 				os.remove(instance[0].text)
 	
 			os.remove(self.brain.GetModelFileName(gbaseName))
 			
+	def DelTable(self, tableName):
+		structure = XML.parse(self.brain.GetModelFileName(self.use)).getroot()
+		for instance in structure[1]:
+			if instance.attrib["Name"] == tableName.lower():
+				os.remove(instance[0].text)
+				structure[1].remove(instance)
+				break
 
-a = GBaseHandler()
+		with open(self.brain.GetModelFileName(self.use), "w") as outputFile:
+                        XML.ElementTree(structure).write(outputFile)
 
-a.Use("testgbase")
-
-a.DelGBase("testgbase")
