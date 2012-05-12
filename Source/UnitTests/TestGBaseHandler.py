@@ -18,7 +18,13 @@ class testGBaseHandler(unittest.TestCase):
 		self.beingTested.GenTable("spameggs")
 		self.beingTested.GenColIn("id", "string", "spameggs")
 		self.beingTested.GenColIn("spamname", "string", "spameggs")
-		
+		self.beingTested.GenRowIn(["id", "spamname"], ["1", "eggs"], "spameggs")
+                self.beingTested.GenRowIn(["id", "spamname"], ["2", "Pizza"], "spameggs")
+                self.beingTested.GenRowIn(["id", "spamname"], ["3", "wings"], "spameggs")
+                self.beingTested.GenRowIn(["id", "spamname"], ["4", "fish"], "spameggs")
+		self.beingTested.GenRowIn(["id", "spamname"], ['42', 'spammer1'], 'spameggs')
+		self.beingTested.GenRowIn(["id", "spamname"], ['43', 'spammer2'], 'spameggs')
+		self.beingTested.GenRowIn(["id", "spamname"], ['44', 'spammer3'], 'spameggs')
 
 	def test_UseWorksProperlyIfCorrectGBaseIsGiven(self):
 		self.beingTested.Use("FooBar")
@@ -51,11 +57,6 @@ class testGBaseHandler(unittest.TestCase):
                         self.assertFalse(fileData.find('<Entity><D>3</D><D>eggs</D></Entity>') == -1)
 
 	def test_multipleGetRowWithQueriesWork(self):
-		self.beingTested.GenRowIn(["id", "spamname"], ["1", "eggs"], "spameggs")
-		self.beingTested.GenRowIn(["id", "spamname"], ["2", "Pizza"], "spameggs")
-		self.beingTested.GenRowIn(["id", "spamname"], ["3", "wings"], "spameggs")
-		self.beingTested.GenRowIn(["id", "spamname"], ["4", "fish"], "spameggs")
-
 		result = self.beingTested.GetRowWith(["id"], ["2"], "spameggs")
 
 		self.assertTrue(result[0][0] == "2" and result[0][1] == "Pizza")
@@ -87,6 +88,27 @@ class testGBaseHandler(unittest.TestCase):
                         fileData = readToTest.read()
                         self.assertTrue(fileData.find('Name="spameggs"') == -1)
 			self.assertTrue(fileData.find('./spameggs-foobar.gbs') == -1)
+
+	def test_DelRowRemovesTheProperData(self):
+		self.beingTested.DelRowWith(['id'], ['42'], 'spameggs')
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertTrue(fileData.find('<D>spammer1</D>') == -1)
+                        self.assertTrue(fileData.find('<D>42</D>') == -1)
+			self.assertTrue(fileData.find('<Entry><D>42</D><D>spammer1</D></Entry>') == -1)
+
+	def test_DelColDeletesTheProperDataFromTheFile(self):
+		self.beingTested.DelColIn('id', 'spameggs')
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertTrue(fileData.find('<D>1</D>') == -1)
+			self.assertTrue(fileData.find('<D>2</D>') == -1)
+			self.assertTrue(fileData.find('<D>3</D>') == -1)
+			self.assertTrue(fileData.find('<D>4</D>') == -1)
+			self.assertTrue(fileData.find('<D>42</D>') == -1)
+			self.assertTrue(fileData.find('<D>43</D>') == -1)
+			self.assertTrue(fileData.find('<D>44</D>') == -1)
+			self.assertTrue(fileData.find('<Field Name="id"><Type>string</Type></Field>') == -1)
 
 	def tearDown(self):
 		s("rm *foobar*")
