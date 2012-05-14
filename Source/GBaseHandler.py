@@ -221,10 +221,6 @@ class GBaseHandler:
 		
 		structure[2] = XML.Element("TableData")
 	
-		print "All Data:"
-		for i in allData:
-			print i
-
 		for data in allData:
 			entryTag = XML.Element("Entry")
 			for datum in data:
