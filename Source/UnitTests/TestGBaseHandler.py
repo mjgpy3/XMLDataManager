@@ -25,6 +25,7 @@ class testGBaseHandler(unittest.TestCase):
 		self.beingTested.GenRowIn(["id", "spamname"], ['42', 'spammer1'], 'spameggs')
 		self.beingTested.GenRowIn(["id", "spamname"], ['43', 'spammer2'], 'spameggs')
 		self.beingTested.GenRowIn(["id", "spamname"], ['44', 'spammer3'], 'spameggs')
+		self.beingTested.GenRowIn(["id", "spamname"], ['45', 'spammer1'], 'spameggs')
 
 	def test_UseWorksProperlyIfCorrectGBaseIsGiven(self):
 		self.beingTested.Use("FooBar")
@@ -93,8 +94,6 @@ class testGBaseHandler(unittest.TestCase):
 		self.beingTested.DelRowWith(['id'], ['42'], 'spameggs')
 		with open("./spameggs-foobar.gbs", 'r') as readToTest:
                         fileData = readToTest.read()
-                        self.assertTrue(fileData.find('<D>spammer1</D>') == -1)
-                        self.assertTrue(fileData.find('<D>42</D>') == -1)
 			self.assertTrue(fileData.find('<Entry><D>42</D><D>spammer1</D></Entry>') == -1)
 
 	def test_DelColDeletesTheProperDataFromTheFile(self):
@@ -117,6 +116,14 @@ class testGBaseHandler(unittest.TestCase):
                         fileData = readToTest.read()
 			self.assertTrue(fileData.find('<D>42</D>') == -1)
 			self.assertFalse(fileData.find('<Entry><D>35</D><D>spammer1</D></Entry>') == -1)
+
+	def test_ModRowWithWorksWhenMultipleRowsAreHitByTheGivenWithConditions(self):
+		self.beingTested.ModRowWith(['spamname'], ['spammer1'], 'spameggs', ['spamname'], ['Mayhem'])
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertFalse(fileData.find('<Entry><D>45</D><D>Mayhem</D></Entry>') == -1)
+			self.assertFalse(fileData.find('<Entry><D>42</D><D>Mayhem</D></Entry>') == -1)
+
 
 	def tearDown(self):
 		s("rm *foobar*")
