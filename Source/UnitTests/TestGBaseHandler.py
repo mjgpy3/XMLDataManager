@@ -73,6 +73,12 @@ class testGBaseHandler(unittest.TestCase):
 
 		self.assertTrue(result == [])
 
+	def test_GetRowWithCanGetMultipleTuplesIfSpecifiedByTheWithAttributes(self):
+		result = self.beingTested.GetRowWith(["spamname"], ["spammer1"], "spameggs")
+		self.assertTrue(result[0][0] == "42" and result[0][1] == "spammer1")
+                self.assertTrue(result[1][0] == "45" and result[1][1] == "spammer1")
+
+		
 	def test_DelGBaseGetsRidOfTheTableAndModelFiles(self):
 		self.beingTested.DelGBase('foobar')
 		self.assertRaises(IOError, open, 'foobar.gbs', 'r')
@@ -95,6 +101,13 @@ class testGBaseHandler(unittest.TestCase):
 		with open("./spameggs-foobar.gbs", 'r') as readToTest:
                         fileData = readToTest.read()
 			self.assertTrue(fileData.find('<Entry><D>42</D><D>spammer1</D></Entry>') == -1)
+
+	def test_DelRowRemovesMultipleRowsIfWithConditionsSpecify(self):
+		self.beingTested.DelRowWith(['spamname'], ['spammer1'], 'spameggs')
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+                        self.assertTrue(fileData.find('<Entry><D>42</D><D>spammer1</D></Entry>') == -1)
+			self.assertTrue(fileData.find('<Entry><D>45</D><D>spammer1</D></Entry>') == -1)
 
 	def test_DelColDeletesTheProperDataFromTheFile(self):
 		self.beingTested.DelColIn('id', 'spameggs')
@@ -123,7 +136,6 @@ class testGBaseHandler(unittest.TestCase):
                         fileData = readToTest.read()
                         self.assertFalse(fileData.find('<Entry><D>45</D><D>Mayhem</D></Entry>') == -1)
 			self.assertFalse(fileData.find('<Entry><D>42</D><D>Mayhem</D></Entry>') == -1)
-
 
 	def tearDown(self):
 		s("rm *foobar*")
