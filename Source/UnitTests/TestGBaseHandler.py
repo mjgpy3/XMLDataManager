@@ -109,6 +109,14 @@ class testGBaseHandler(unittest.TestCase):
 			self.assertTrue(fileData.find('<D>43</D>') == -1)
 			self.assertTrue(fileData.find('<D>44</D>') == -1)
 			self.assertTrue(fileData.find('<Field Name="id"><Type>string</Type></Field>') == -1)
+			self.assertFalse(fileData.find('spammer1') == -1)
+
+	def test_ModRowWithMakesAChangeToTheFileCorrectly(self):
+		self.beingTested.ModRowWith(["id"], ["42"], "spameggs", ["id"], ["35"])
+		with open("./spameggs-foobar.gbs", 'r') as readToTest:
+                        fileData = readToTest.read()
+			self.assertTrue(fileData.find('<D>42</D>') == -1)
+			self.assertFalse(fileData.find('<Entry><D>35</D><D>spammer1</D></Entry>') == -1)
 
 	def tearDown(self):
 		s("rm *foobar*")

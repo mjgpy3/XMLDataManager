@@ -221,6 +221,10 @@ class GBaseHandler:
 		
 		structure[2] = XML.Element("TableData")
 	
+		print "All Data:"
+		for i in allData:
+			print i
+
 		for data in allData:
 			entryTag = XML.Element("Entry")
 			for datum in data:
@@ -252,12 +256,12 @@ class GBaseHandler:
         	                XML.ElementTree(structure).write(outputFile)
 
 	def ModRowWith(self, withAttrs, withValues, inThisTable, thatAttrs, thatValues):
-		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
                 dataToModify = self.GetRowWith(withAttrs, withValues, inThisTable)
 		nameToLocation = {}
 		index = 0
 
 		self.DelRowWith(withAttrs, withValues, inThisTable)
+		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
 
 		for field in XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()[1]:
                         nameToLocation[field.attrib["Name"]] = index
