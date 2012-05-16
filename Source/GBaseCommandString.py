@@ -14,21 +14,44 @@ class GBaseCommandString:
 	""" Converts a string into self (the calling GBaseCommandString object) """
 	def StringToCommandString(self, convertMe):
 		partsOfCommand = self.ImplantUnderlines(convertMe).split(' ')
+
+		self.ResetCommand()
 		
 		if partsOfCommand[0].lower() == "use":
 			self.GBaseName = self.GetPropertyName(partsOfCommand, 1) 
 		elif partsOfCommand[0].lower() == "gen":
-			pass
+			self.SetDelOrGen(partsOfCommand, convertMe)
 		elif partsOfCommand[0].lower() == "get":
-			pass
+			self.SetActsUpon(partsOfCommand)
+			self.SetAttributesBetweenClauses(partsOfCommand, "with")
+			self.TableName = self.GetTableNameAfterIn(partsOfCommand)
 		elif partsOfCommand[0].lower() == "del":
-			pass
+			self.SetDelOrGen(partsOfCommand, convertMe)
 		elif partsOfCommand[0].lower() == "mod":
-			pass
+			self.SetActsUpon(partsOfCommand)
+			self.SetAttributesBetweenClauses(partsOfCommand, "with")
+			self.TableName = self.GetTableNameAfterIn(partsOfCommand)
+			self.SetAttributesBetweenClauses(partsOfCommand, "that")
 		elif partsOfCommand[0].lower() == "help":
 			pass
 		else:
 			pass
+
+		self.Command = partsOfCommand[0].lower()
+
+	def SetDelOrGen(self, partsOfCommand, commandString):
+		self.SetActsUpon(partsOfCommand)
+
+		if self.ActsUpon == 'gbase':
+			self.GBaseName = self.GetPropertyName(partsOfCommand, 2)
+		elif self.ActsUpon == 'table':
+			self.TableName = self.GetPropertyName(partsOfCommand, 2)
+		elif self.ActsUpon == 'col':
+			self.ColName = self.GetPropertyName(partsOfCommand, 2)
+			self.TableName = self.GetTableNameAfterIn(partsOfCommand)
+		elif self.ActsUpon == 'row':
+			self.SetWithAttributesAndValues(partsOfCommand)
+                    	self.TableName = self.GetTableNameAfterIn(partsOfCommand)
 
 	""" Gets a property at an expected location """
 	def GetPropertyName(self, partsOfCommand, wherePropertyShouldBe):
@@ -57,6 +80,51 @@ class GBaseCommandString:
 
 		return result
 
+	def SetAttributesBetweenClauses(self, partsOfCommand, begin):
+		pairs = self.GetAttributesInClause(partsOfCommand, begin.lower())
+		
+		if pairs == None:
+			raise GBaseExceptions.GBaseRowCommandMustHaveClauseException(begin)
+
+		tempAttrs = []
+		tempValues = []
+
+		if not pairs[0] == '*':
+			for pair in pairs:
+				try:
+					tempAttrs.append(pair.split(':')[0])
+					tempValues.append(pair.split(':')[1].replace('_', ' '))
+				except:
+					GBaseExceptions.GBaseAttrValuePairsMustBeOfFormException()
+
+		if begin.lower() == 'with':
+			self.WithAttributes, self.WithValues = tempAttrs, tempValues
+		elif begin.lower() == 'that':
+			self.ThatAttributes, self.ThatValues = tempAttrs, tempValues
+
+	def GetAttributesInClause(self, partsOfCommand, clause):
+		for i in range(len(partsOfCommand)):
+			if clause.lower() == 'with' and partsOfCommand[i].lower() == 'with':
+				for k in range(1, len(partsOfCommand)):
+					if partsOfCommand[k].lower() == 'in':
+						return partsOfCommand[i + 1:k]
+			elif clause.lower() == 'that' and partsOfCommand[i].lower() == 'that':
+				return partsOfCommand[i + 1:]	
+	
+	def GetTableNameAfterIn(self, partsOfCommand):
+		for i in range(len(partsOfCommand)):
+			if partsOfCommand[i].lower() == 'in': return partsOfCommand[i + 1].lower()
+		raise GBaseExceptions.GBaseCommandMustBeFollowedByException(partsOfCommand[0], "an IN clause specifying the tablename")
+
+	def SetActsUpon(self, partsOfCommand):
+		try:
+			if partsOfCommand[1].lower() in ['table', 'gbase', 'row', 'col']:
+				self.ActsUpon = partsOfCommand[1].lower()
+			else:
+				raise GBaseExceptions.GBaseCommandMustBeFollowedByException(partsOfCommand[0], "one of the following keywords: GBASE, MODEL, COL, ROW")
+		except:
+			raise GBaseExceptions.GBaseCommandMustBeFollowedByException(partsOfCommand[0], "one of the following keywords: GBASE, MODEL, COL, ROW")
+
 	def ResetCommand(self):
 		self.Command = ""
                 self.ActsUpon = ""
@@ -68,4 +136,4 @@ class GBaseCommandString:
                 self.ThatAttributes = []
                 self.ThatValues = []
                 self.ErrorOccured = False
-				
+

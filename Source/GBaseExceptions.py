@@ -19,19 +19,12 @@ class GBaseDoesNotRecognizeCommandException(Exception):
         def __str__(self):
                 return repr(self.message)
 
-""" Exception for when a ROW command does not have a WITH Clause """
-class GBaseRowCommandMustHaveWithClauseException(Exception):
-	def __init__(self):
-		self.message = "GBase ROW command must have a WITH clause specifying attr:value pairs"
+""" Exception for when a ROW command does not have some given Clause """
+class GBaseRowCommandMustHaveClauseException(Exception):
+	def __init__(self, clause):
+		self.message = "GBase ROW command must have a " + clause.upper() +  " clause specifying attr:value pairs"
         def __str__(self):
                 return repr(self.message)
-
-""" Exception for when a MOD command does not have a THAT Clause """
-class GBaseModCommandMustHaveThatClauseException(Exception):
-	def __init__(self):
-		self.message = "GBase MOD command must have a THAT clause specifying attr:value pairs"
-	def __str__(self):
-		return repr(self.message)
 
 """ Exception for when attr:value pairs are wrong """
 class GBaseAttrValuePairsMustBeOfFormException(Exception):

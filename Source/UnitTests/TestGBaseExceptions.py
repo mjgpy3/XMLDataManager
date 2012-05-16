@@ -34,19 +34,13 @@ class testGBaseExceptions(unittest.TestCase):
                 except beingTested.GBaseDoesNotRecognizeCommandException as e:
                         self.assertEqual(e.message, '"foobar" is not recognized as a GBase command')
 
-	def test_ensureThatNeedWithExceptionWorksAndMessageIsCorrect(self):
-                try:
-                        raise beingTested.GBaseRowCommandMustHaveWithClauseException()
-                        self.fail("Code shouldn't have been reached")
-                except beingTested.GBaseRowCommandMustHaveWithClauseException as e:
-                        self.assertEqual(e.message, "GBase ROW command must have a WITH clause specifying attr:value pairs")
 
 	def test_ensureThatNeedThatExceptionWorksAndMessageIsCorrect(self):
                 try:
-                        raise beingTested.GBaseModCommandMustHaveThatClauseException()
+                        raise beingTested.GBaseRowCommandMustHaveClauseException("CLAUSE")
                         self.fail("Code shouldn't have been reached")
-                except beingTested.GBaseModCommandMustHaveThatClauseException as e:
-                        self.assertEqual(e.message, "GBase MOD command must have a THAT clause specifying attr:value pairs")
+                except beingTested.GBaseRowCommandMustHaveClauseException as e:
+                        self.assertEqual(e.message, 'GBase ROW command must have a CLAUSE clause specifying attr:value pairs')
 
 	def test_ensureThatUnFormattedAttrValExceptionWorksAndMessageIsCorrect(self):
                 try:
