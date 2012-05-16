@@ -75,6 +75,95 @@ class testGBaseCommandString(unittest.TestCase):
 	def test_IfBoundsOfListAreExceededThenGetPropertyNameThrowsAnException(self):
 		self.assertRaises(GBaseExceptions.GBaseGeneralException, self.beingTested.GetPropertyName, ['command'], 1)
 
+	def test_ResetCommandWorksAfterASimpleGetCommand(self):
+		self.beingTested.StringToCommandString("Get row with attr1:something attr2:something in table")
+		self.beingTested.ResetCommand()
+		self.assertEqual(self.beingTested.Command, '')
+		self.assertEqual(self.beingTested.ActsUpon, '')
+		self.assertEqual(self.beingTested.WithAttributes, [])
+		self.assertEqual(self.beingTested.WithValues, [])
+		self.assertEqual(self.beingTested.TableName, '')
+
+	def test_Command_GenGbaseWorks(self):
+		self.beingTested.StringToCommandString("GeN GBaSe GBaseName")
+		self.assertEqual(self.beingTested.Command, 'gen')
+		self.assertEqual(self.beingTested.ActsUpon, 'gbase')
+		self.assertEqual(self.beingTested.GBaseName, 'gbasename')
+
+	def test_Command_GenTableWorks(self):
+                self.beingTested.StringToCommandString("GeN TaBlE TaBlEName")
+                self.assertEqual(self.beingTested.Command, 'gen')
+                self.assertEqual(self.beingTested.ActsUpon, 'table')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+
+	def test_Command_GenRowWorks(self):
+                self.beingTested.StringToCommandString('GeN Row with attr1:"Some value" attr2:other in taBleName')
+                self.assertEqual(self.beingTested.Command, 'gen')
+                self.assertEqual(self.beingTested.ActsUpon, 'row')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+		self.assertTrue(self.beingTested.WithAttributes[0] == 'attr1' and self.beingTested.WithAttributes[1] == 'attr2')
+		self.assertTrue(self.beingTested.WithValues[0] == 'Some value' and self.beingTested.WithValues[1] == 'other')
+
+	def test_Command_GenColWorks(self):
+		self.beingTested.StringToCommandString('GeN CoL colName in tableName')
+                self.assertEqual(self.beingTested.Command, 'gen')
+                self.assertEqual(self.beingTested.ActsUpon, 'col')
+		self.assertEqual(self.beingTested.ColName, 'colname')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+
+	def test_Command_DelGbaseWorks(self):
+                self.beingTested.StringToCommandString("DeL GBaSe GBaseName")
+                self.assertEqual(self.beingTested.Command, 'del')
+                self.assertEqual(self.beingTested.ActsUpon, 'gbase')
+                self.assertEqual(self.beingTested.GBaseName, 'gbasename')
+
+        def test_Command_DelTableWorks(self):
+                self.beingTested.StringToCommandString("DeL TaBlE TaBlEName")
+                self.assertEqual(self.beingTested.Command, 'del')
+                self.assertEqual(self.beingTested.ActsUpon, 'table')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+
+        def test_Command_DelRowWorks(self):
+                self.beingTested.StringToCommandString('Del Row with attr1:"Some value" attr2:other in taBleName')
+                self.assertEqual(self.beingTested.Command, 'del')
+                self.assertEqual(self.beingTested.ActsUpon, 'row')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+                self.assertTrue(self.beingTested.WithAttributes[0] == 'attr1' and self.beingTested.WithAttributes[1] == 'attr2')
+                self.assertTrue(self.beingTested.WithValues[0] == 'Some value' and self.beingTested.WithValues[1] == 'other')
+
+        def test_Command_DelColWorks(self):
+                self.beingTested.StringToCommandString('Del CoL colName in tableName')
+                self.assertEqual(self.beingTested.Command, 'del')
+                self.assertEqual(self.beingTested.ActsUpon, 'col')
+                self.assertEqual(self.beingTested.ColName, 'colname')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+
+	def test_Command_UseWorks(self):
+		self.beingTested.StringToCommandString('UsE GBaseNAme')
+                self.assertEqual(self.beingTested.Command, 'use')
+		self.assertEqual(self.beingTested.GBaseName, 'gbasename')
+
+	def test_Command_GetRowWithWorks(self):
+		self.beingTested.StringToCommandString('gEt Row with attr1:"Some value" attr2:other in taBleName')
+                self.assertEqual(self.beingTested.Command, 'get')
+                self.assertEqual(self.beingTested.ActsUpon, 'row')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+                self.assertTrue(self.beingTested.WithAttributes[0] == 'attr1' and self.beingTested.WithAttributes[1] == 'attr2')
+                self.assertTrue(self.beingTested.WithValues[0] == 'Some value' and self.beingTested.WithValues[1] == 'other')
+
+	def test_Command_ModRowWithWorks(self):
+        	self.beingTested.StringToCommandString('Mod Row with attr1:"Some value" attr2:other in taBleName that attr2:"something new" attr3:foo')
+                self.assertEqual(self.beingTested.Command, 'mod')
+                self.assertEqual(self.beingTested.ActsUpon, 'row')
+                self.assertEqual(self.beingTested.TableName, 'tablename')
+                self.assertTrue(self.beingTested.WithAttributes[0] == 'attr1' and self.beingTested.WithAttributes[1] == 'attr2')
+                self.assertTrue(self.beingTested.WithValues[0] == 'Some value' and self.beingTested.WithValues[1] == 'other')
+		self.assertTrue(self.beingTested.ThatAttributes[0] == 'attr2' and self.beingTested.ThatAttributes[1] == 'attr3')
+                self.assertTrue(self.beingTested.ThatValues[0] == 'something new' and self.beingTested.ThatValues[1] == 'foo')
+
+	def test_IfUnrecognizedCommandIsGivenAnExceptionIsRaised(self):
+		self.assertRaises(GBaseExceptions.GBaseDoesNotRecognizeCommandException, self.beingTested.StringToCommandString, "foo gbase something")
+
 	def tearDown(self):
 		pass
 
@@ -85,3 +174,4 @@ def suite():
 
 if __name__ == '__main__':
 	unittest.TextTestRunner(verbosity=2).run(suite())
+

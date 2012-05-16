@@ -35,7 +35,7 @@ class GBaseCommandString:
 		elif partsOfCommand[0].lower() == "help":
 			pass
 		else:
-			pass
+			raise GBaseExceptions.GBaseDoesNotRecognizeCommandException(partsOfCommand[0])
 
 		self.Command = partsOfCommand[0].lower()
 
@@ -50,7 +50,7 @@ class GBaseCommandString:
 			self.ColName = self.GetPropertyName(partsOfCommand, 2)
 			self.TableName = self.GetTableNameAfterIn(partsOfCommand)
 		elif self.ActsUpon == 'row':
-			self.SetWithAttributesAndValues(partsOfCommand)
+			self.SetAttributesBetweenClauses(partsOfCommand, "with")
                     	self.TableName = self.GetTableNameAfterIn(partsOfCommand)
 
 	""" Gets a property at an expected location """
