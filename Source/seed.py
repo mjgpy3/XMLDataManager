@@ -4,6 +4,9 @@
 # Date: Sat May 12 09:22:18 EDT 2012
 # 
 # 
+
+""" For testing purposes, creates a GBase and fills it with tables, cols and rows """
+
 from GBaseHandler import GBaseHandler as g
 
 a = g()

@@ -5,6 +5,8 @@
 # 
 # 
 
+""" Does XML operations, NOT NEEDED FOR GBASE """
+
 import GBaseExceptions
 from xml.etree.ElementTree import ElementTree
 

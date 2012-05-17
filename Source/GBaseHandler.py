@@ -17,10 +17,12 @@ class GBaseHandler:
 		self.use = ""
 		self.brain = GBaseBrain.GBaseBrain()
 
+	""" Tells the handler to use a different GBase """
 	def Use(self, gbaseName):
 		if self.brain.FileIsModel(self.brain.GetModelFileName(gbaseName)):
 			self.use = gbaseName.lower()
 	
+	""" Creates a new GBase of the passed name """
 	def GenGBase(self, gbaseName):
 		root = XML.Element("GBase", Type="model")		
 		headerInfo = XML.Element("HeaderInfo")
@@ -44,6 +46,7 @@ class GBaseHandler:
 
 		self.Use(gbaseName)
 
+	""" Creates a new table of the passed name """
 	def GenTable(self, tableName):
 		tree = XML.parse(self.brain.GetModelFileName(self.use))
 		gbaseRoot = tree.getroot()
@@ -73,7 +76,7 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(tableName, self.use), "w") as outputFile:
                         XML.ElementTree(root).write(outputFile)
 
-
+	""" Creates a new column of the passed name and type, in the passed tableName """
 	def GenColIn(self, colName, colType, inThisTable):
 		found = False 
 		for tableInstance in XML.parse(self.brain.GetModelFileName(self.use)).getroot()[1]:
@@ -97,6 +100,7 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 		
+	""" Creates a row with the specified, parallel attribute and value lists in the passed table """
 	def GenRowIn(self, attrs, values, inThisTable):
 		attrsFromFile = []
 		dictToWrite = {}
@@ -140,7 +144,7 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 
-
+	""" Returns all rows mathign the passed parallel attribute and value pairs in the passed table """
 	def GetRowWith(self, attrs, values, inThisTable):
 		attrsFromFile = []
                 dictToTest = {}
@@ -190,6 +194,7 @@ class GBaseHandler:
 				result.append(toAppend)
 		return result
 
+	""" Deletes a GBase whose name is given """
 	def DelGBase(self, gbaseName):
 		if self.brain.FileIsModel(self.brain.GetModelFileName(gbaseName)):
 			for instance in XML.parse(self.brain.GetModelFileName(gbaseName)).getroot()[1]:
@@ -197,6 +202,7 @@ class GBaseHandler:
 	
 			os.remove(self.brain.GetModelFileName(gbaseName))
 			
+	""" Deletes a table whose name is given """
 	def DelTable(self, tableName):
 		structure = XML.parse(self.brain.GetModelFileName(self.use)).getroot()
 		for instance in structure[1]:
@@ -208,6 +214,7 @@ class GBaseHandler:
 		with open(self.brain.GetModelFileName(self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 
+	""" Deletes all rows matching the passed attribute value pairs in the passed table """
 	def DelRowWith(self, attrs, values, inThisTable):
 		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
 		allData = self.GetRowWith([], [], inThisTable)
@@ -233,6 +240,7 @@ class GBaseHandler:
 		with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
                         XML.ElementTree(structure).write(outputFile)
 
+	""" Deletes the passed column by name, and all columns that corrispond in rows in the passed table """
 	def DelColIn(self, colName, inThisTable):
 		foundAndAt = [False, -1]
 		structure = XML.parse(self.brain.GetTableFileName(inThisTable, self.use)).getroot()
@@ -251,6 +259,7 @@ class GBaseHandler:
 			with open(self.brain.GetTableFileName(inThisTable, self.use), "w") as outputFile:
         	                XML.ElementTree(structure).write(outputFile)
 
+	""" Changes all row that matchin the WITH attribute-value pairs, in the passed tablename, making them into the THAT AV pairs """
 	def ModRowWith(self, withAttrs, withValues, inThisTable, thatAttrs, thatValues):
                 dataToModify = self.GetRowWith(withAttrs, withValues, inThisTable)
 		nameToLocation = {}

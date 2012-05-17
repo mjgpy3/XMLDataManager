@@ -39,6 +39,7 @@ class GBaseCommandString:
 
 		self.Command = partsOfCommand[0].lower()
 
+	""" Handles all commands DEL or GEN """
 	def SetDelOrGen(self, partsOfCommand, commandString):
 		self.SetActsUpon(partsOfCommand)
 
@@ -80,6 +81,7 @@ class GBaseCommandString:
 
 		return result
 
+	""" Sets all attributes between clauses begun with 'begin', these may be THAT or WITH """
 	def SetAttributesBetweenClauses(self, partsOfCommand, begin):
 		pairs = self.GetAttributesInClause(partsOfCommand, begin.lower())
 		
@@ -102,6 +104,7 @@ class GBaseCommandString:
 		elif begin.lower() == 'that':
 			self.ThatAttributes, self.ThatValues = tempAttrs, tempValues
 
+	""" Actually gets the attributes in a with or that clause """
 	def GetAttributesInClause(self, partsOfCommand, clause):
 		for i in range(len(partsOfCommand)):
 			if clause.lower() == 'with' and partsOfCommand[i].lower() == 'with':
@@ -109,13 +112,15 @@ class GBaseCommandString:
 					if partsOfCommand[k].lower() == 'in':
 						return partsOfCommand[i + 1:k]
 			elif clause.lower() == 'that' and partsOfCommand[i].lower() == 'that':
-				return partsOfCommand[i + 1:]	
+				return partsOfCommand[i + 1:]
 	
+	""" Gets a table name after an in statement, raises an error if not found """
 	def GetTableNameAfterIn(self, partsOfCommand):
 		for i in range(len(partsOfCommand)):
 			if partsOfCommand[i].lower() == 'in': return partsOfCommand[i + 1].lower()
 		raise GBaseExceptions.GBaseCommandMustBeFollowedByException(partsOfCommand[0], "an IN clause specifying the tablename")
 
+	""" Sets the ActsUpon property, which should always be in the 1st slot (right after the command) """
 	def SetActsUpon(self, partsOfCommand):
 		try:
 			if partsOfCommand[1].lower() in ['table', 'gbase', 'row', 'col']:
@@ -125,6 +130,7 @@ class GBaseCommandString:
 		except:
 			raise GBaseExceptions.GBaseCommandMustBeFollowedByException(partsOfCommand[0], "one of the following keywords: GBASE, MODEL, COL, ROW")
 
+	""" (Re-)Initializes the command's properties """
 	def ResetCommand(self):
 		self.Command = ""
                 self.ActsUpon = ""

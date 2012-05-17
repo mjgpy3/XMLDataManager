@@ -34,7 +34,8 @@ class GBaseBrain:
 	""" Returns the corrisponding table's file name of the passed information """
         def GetModelFileName(self, modelName):
 		return self.location + modelName.lower() + self.extension
-
+	
+	""" Returns true if the passed lists have the same elements, false otherwise """
 	def HaveSameElements(self, list1, list2):
 		a, b = set(list1), set(list2)
 		return len((a - b) | (b - a)) == 0  
