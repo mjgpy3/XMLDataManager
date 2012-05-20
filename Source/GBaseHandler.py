@@ -185,8 +185,7 @@ class GBaseHandler:
                 for entity in structure[2]:
 			allMatch = True
 			for attribute in attrs:
-				#if dictToTest[attribute] != entity[nameToLocation[attribute]].text:
-				if not re.compile(dictToTest[attribute]).match(entity[nameToLocation[attribute]].text):
+				if dictToTest[attribute] != entity[nameToLocation[attribute]].text:
 					allMatch = False
 					break
 			if allMatch:
