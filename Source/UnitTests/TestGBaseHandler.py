@@ -78,6 +78,12 @@ class testGBaseHandler(unittest.TestCase):
 		self.assertTrue(result[0][0] == "42" and result[0][1] == "spammer1")
                 self.assertTrue(result[1][0] == "45" and result[1][1] == "spammer1")
 
+	def test_GetRowWithPlaysWellWithAnExampleUsingRegularExpressions(self):
+                result = self.beingTested.GetRowWith(["spamname"], ["spammer*"], "spameggs")
+		self.assertEqual(result[0], ['42', 'spammer1'])
+		self.assertEqual(result[1], ['43', 'spammer2'])
+		self.assertEqual(result[2], ['44', 'spammer3'])
+		self.assertEqual(result[3], ['45', 'spammer1'])
 		
 	def test_DelGBaseGetsRidOfTheTableAndModelFiles(self):
 		self.beingTested.DelGBase('foobar')

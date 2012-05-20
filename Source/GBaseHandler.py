@@ -11,6 +11,7 @@ import getpass
 import datetime
 import GBaseExceptions
 import os
+import re
 
 class GBaseHandler:
 	def __init__(self):
@@ -184,7 +185,8 @@ class GBaseHandler:
                 for entity in structure[2]:
 			allMatch = True
 			for attribute in attrs:
-				if entity[nameToLocation[attribute]].text != dictToTest[attribute]:
+				#if dictToTest[attribute] != entity[nameToLocation[attribute]].text:
+				if not re.compile(dictToTest[attribute]).match(entity[nameToLocation[attribute]].text):
 					allMatch = False
 					break
 			if allMatch:
